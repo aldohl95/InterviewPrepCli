@@ -1,0 +1,26 @@
+#Virtual envioronment
+.venv/
+venv/
+env/
+
+#python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+#Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+#testign
+.pytest_cache/
+.coverage
+htmlcov/
+
+#Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
