@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "interviewprep-cli"
+version = "0.1.0"
+description = "A CLI tool for organizing technical interview preparation"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+]
+
+[project.scripts]
+interviewprep = "interviewprep.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+verbosity = 1
+
+[tool.setuptools.packages.find]
+where = ["src"]
