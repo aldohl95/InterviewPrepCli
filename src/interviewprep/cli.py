@@ -1,2 +1,2 @@
 def main():
-  print("InterviewPrep CLI is running.")
+    print("InterviewPrep CLI is running.")
