@@ -1,5 +1,6 @@
 import click
 from interviewprep.commands.add import add
+from interviewprep.commands.list import list_problems
 
 
 @click.group()
@@ -9,3 +10,4 @@ def main():
 
 
 main.add_command(add)
+main.add_command(list_problems)
