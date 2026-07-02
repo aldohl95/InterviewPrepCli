@@ -1,6 +1,7 @@
 import click
 from interviewprep.commands.add import add
 from interviewprep.commands.list import list_problems
+from interviewprep.commands.view import view
 
 
 @click.group()
@@ -11,3 +12,4 @@ def main():
 
 main.add_command(add)
 main.add_command(list_problems)
+main.add_command(view)
