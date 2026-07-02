@@ -198,3 +198,33 @@ def test_edit_command_invalid_number(tmp_path, monkeypatch):
         + "\n",
     )
     assert result.exit_code == 1
+
+
+def test_delete_command_removes_problem(tmp_path, monkeypatch):
+    monkeypatch.setattr(storage, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(storage, "DATA_FILE", tmp_path / "problems.json")
+
+    runner = CliRunner()
+    problem = make_problem()
+    storage.save_problems([problem])
+
+    result = runner.invoke(
+        main,
+        ["delete", "1"],
+        input="\n".join(["y"]) + "\n",
+    )
+
+    assert "You have Succesfully deleted problem 1" in result.output
+
+
+def test_delete_command_invalid_number(tmp_path, monkeypatch):
+    monkeypatch.setattr(storage, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(storage, "DATA_FILE", tmp_path / "problems.json")
+
+    runner = CliRunner()
+    problem = make_problem()
+    storage.save_problems([problem])
+
+    result = runner.invoke(main, ["delete", "99"])
+
+    assert result.exit_code == 1
