@@ -21,5 +21,5 @@ def view(number):
         click.echo(f"Next Review Date: {problem.next_review_date}")
         click.echo(f"Recognition Sentence: {problem.recognition_sentence}")
     else:
-        click.echo(" Error: invalid problem number.")
+        click.echo("Error: invalid problem number.")
         raise SystemExit(1)
