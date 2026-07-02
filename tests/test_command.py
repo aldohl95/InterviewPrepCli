@@ -108,3 +108,34 @@ def test_list_command_empty(tmp_path, monkeypatch):
     )
 
     assert "No Saved problems yet." in result.output
+
+
+def test_view_command_shows_problem(tmp_path, monkeypatch):
+    monkeypatch.setattr(storage, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(storage, "DATA_FILE", tmp_path / "problems.json")
+
+    runner = CliRunner()
+
+    problem = make_problem()
+    storage.save_problems([problem])
+
+    result = runner.invoke(
+        main,
+        ["view", "1"],
+    )
+
+    assert "Two Sum" in result.output
+
+
+def test_view_command_invalid_number(tmp_path, monkeypatch):
+    monkeypatch.setattr(storage, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(storage, "DATA_FILE", tmp_path / "problems.json")
+
+    runner = CliRunner()
+
+    problem = make_problem()
+    storage.save_problems([problem])
+
+    result = runner.invoke(main, ["view", "5"])
+
+    assert result.exit_code == 1
