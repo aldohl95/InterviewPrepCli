@@ -159,13 +159,14 @@ def test_edit_command_updates_problem(tmp_path, monkeypatch):
                 "Easy",
                 "5",
                 "15",
-                "\n",
-                "\n",
-                "\n",
+                "n",
+                "n",
+                "",
             ]
         )
         + "\n",
     )
+    print(result.output)
     assert result.exit_code == 0
     problems = storage.load_problems()
     assert problems[0].problem_name == "Reverse Linked List"
