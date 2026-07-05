@@ -2,6 +2,7 @@ from click.testing import CliRunner
 from interviewprep.cli import main
 from interviewprep import storage
 from interviewprep.models import Problem, LeetcodeDifficulty
+from datetime import date, timedelta
 
 
 def test_add_command_saves_problem(tmp_path, monkeypatch):
@@ -166,7 +167,6 @@ def test_edit_command_updates_problem(tmp_path, monkeypatch):
         )
         + "\n",
     )
-    print(result.output)
     assert result.exit_code == 0
     problems = storage.load_problems()
     assert problems[0].problem_name == "Reverse Linked List"
@@ -227,5 +227,50 @@ def test_delete_command_invalid_number(tmp_path, monkeypatch):
     storage.save_problems([problem])
 
     result = runner.invoke(main, ["delete", "99"])
+
+    assert result.exit_code == 1
+
+
+def test_review_command_creates_new_attempt(tmp_path, monkeypatch):
+    monkeypatch.setattr(storage, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(storage, "DATA_FILE", tmp_path / "problems.json")
+
+    runner = CliRunner()
+    problem = make_problem()
+    storage.save_problems([problem])
+
+    result = runner.invoke(
+        main,
+        ["review", "1"],
+        input="\n".join(
+            [
+                "",
+                "",
+                "",
+                "8",
+                "",
+                "y",
+                "y",
+                "",
+            ]
+        )
+        + "\n",
+    )
+
+    assert result.exit_code == 0
+    problems = storage.load_problems()
+    assert problems[1].date_attempted == date.today()
+    assert problems[1].next_review_date == date.today() + timedelta(days=1)
+
+
+def test_review_command_invalid_number(tmp_path, monkeypatch):
+    monkeypatch.setattr(storage, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(storage, "DATA_FILE", tmp_path / "problems.json")
+
+    problem = make_problem()
+    runner = CliRunner()
+    storage.save_problems([problem])
+
+    result = runner.invoke(main, ["review", "99"])
 
     assert result.exit_code == 1

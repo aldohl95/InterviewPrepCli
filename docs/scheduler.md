@@ -46,3 +46,8 @@ which caps daily reviews and prioritizes by overdue-ness.
 ## Future Considerations
 - Migration to SM-2 or FSRS if the tool scales beyond interview prep
 - Splitting `Problem` and `Attempt` into separate models for cleaner identity handling
+- The `edit` command intentionally does not recalculate `next_review_date` when 
+  scheduling-related fields (personal_difficulty, needed_help) are edited. If a user 
+  wants their schedule updated, they should log a new attempt via `review`. If edit 
+  gains stronger semantics later (fixing recent typos in an attempt), consider 
+  recalculating on edit for consistency.

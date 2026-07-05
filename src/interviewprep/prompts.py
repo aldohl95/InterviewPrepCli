@@ -1,10 +1,13 @@
 from typing import Optional
 from interviewprep.models import Problem, LeetcodeDifficulty
 import click
+from datetime import date
 
 
 def prompt_for_problem(existing: Optional[Problem] = None) -> Problem:
     show_defaults = existing is not None
+
+    date_attempted = existing.date_attempted if existing else date.today()
 
     problem_name = click.prompt(
         "Problem Name:  ",
@@ -67,6 +70,7 @@ def prompt_for_problem(existing: Optional[Problem] = None) -> Problem:
         time_taken_min=time_taken_min,
         needed_help=needed_help,
         needs_resolve=needs_resolve,
+        date_attempted=date_attempted,
         recognition_sentence=recognition_sentence if recognition_sentence else None,
     )
 
