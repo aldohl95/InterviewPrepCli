@@ -24,6 +24,7 @@ class Problem:
     recognition_sentence: Optional[str] = None
 
     def __post_init__(self):
+        self.problem_name = self.problem_name.strip()
         if not 1 <= self.personal_difficulty <= 10:
             raise ValueError(
                 "personal_difficulty must be between 1 & 10, "

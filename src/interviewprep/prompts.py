@@ -4,16 +4,25 @@ import click
 
 
 def prompt_for_problem(existing: Optional[Problem] = None) -> Problem:
+    show_defaults = existing is not None
+
     problem_name = click.prompt(
-        "Problem Name:  ", default=existing.problem_name if existing else ""
+        "Problem Name:  ",
+        default=existing.problem_name if existing else "",
+        show_default=show_defaults,
     )
 
-    pattern = click.prompt("Pattern: ", default=existing.pattern if existing else "")
+    pattern = click.prompt(
+        "Pattern: ",
+        default=existing.pattern if existing else "",
+        show_default=show_defaults,
+    )
 
     difficulty_choice = click.prompt(
         "Leetcode Difficulty: ",
         type=click.Choice(["Easy", "Medium", "Hard"], case_sensitive=False),
         default=existing.leetcode_difficulty.value if existing else "Easy",
+        show_default=show_defaults,
     )
 
     leetcode_difficulty = LeetcodeDifficulty(difficulty_choice.capitalize())
@@ -22,21 +31,26 @@ def prompt_for_problem(existing: Optional[Problem] = None) -> Problem:
         "Personal Difficulty: ",
         type=click.IntRange(1, 10),
         default=existing.personal_difficulty if existing else 1,
+        show_default=show_defaults,
     )
 
     time_taken_min = click.prompt(
         "Time Taken to Complete(min): ",
         type=int,
         default=existing.time_taken_min if existing else 15,
+        show_default=show_defaults,
     )
 
     needed_help = click.confirm(
-        "Did you need help/hint? ", default=existing.needed_help if existing else False
+        "Did you need help/hint? ",
+        default=existing.needed_help if existing else False,
+        show_default=show_defaults,
     )
 
     needs_resolve = click.confirm(
         "Does this need resolve? ",
         default=existing.needs_resolve if existing else False,
+        show_default=show_defaults,
     )
 
     recognition_sentence = click.prompt(
