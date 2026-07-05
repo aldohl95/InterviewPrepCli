@@ -36,6 +36,13 @@ the same `problem_name`. Otherwise it is a "subsequent review."
   Two different problems sharing a name would be treated as the same problem.
 - No support for manual override of scheduled dates yet.
 
+### Handling Review Overload
+The algorithm's tight 1-day interval for hard problems can create daily review 
+backlogs when a user struggles with multiple problems in the same session. This is 
+intentional the algorithm's job is to signal what needs review, not to manage 
+daily volume. Load management is handled by the Daily Study Planner (Feature 4), 
+which caps daily reviews and prioritizes by overdue-ness.
+
 ## Future Considerations
 - Migration to SM-2 or FSRS if the tool scales beyond interview prep
 - Splitting `Problem` and `Attempt` into separate models for cleaner identity handling
