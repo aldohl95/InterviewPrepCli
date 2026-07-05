@@ -55,3 +55,7 @@ def load_problems() -> list[Problem]:
         return []
     with open(DATA_FILE) as f:
         return [_dict_to_problem(d) for d in json.load(f)]
+
+
+def find_attempts_by_name(problems: list[Problem], name: str) -> list[Problem]:
+    return [p for p in problems if p.problem_name == name]
