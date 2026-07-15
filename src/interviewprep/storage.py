@@ -59,3 +59,6 @@ def load_problems() -> list[Problem]:
 
 def find_attempts_by_name(problems: list[Problem], name: str) -> list[Problem]:
     return [p for p in problems if p.problem_name == name]
+
+def find_attempts_by_needs_resolve(problems: list[Problem], needs_resolve: bool) -> list[Problem]:
+    return [p for p in problems if p.needs_resolve == True]
