@@ -3,6 +3,7 @@ from interviewprep.cli import main
 from interviewprep import storage
 from interviewprep.models import Problem, LeetcodeDifficulty
 from datetime import date, timedelta
+from interviewprep.streak import update_streak
 
 
 def test_add_command_saves_problem(tmp_path, monkeypatch):
@@ -296,6 +297,34 @@ def test_dashboard_command_empty(tmp_path, monkeypatch):
 
     runner = CliRunner()
 
-    runner = runner.invoke(main, ["dashboard"])
+    result = runner.invoke(main, ["dashboard"])
 
-    assert "No Saved Problems yet"
+    assert "No Saved Problems yet" in result.output
+
+
+def test_today_command_shows_list(tmp_path, monkeypatch):
+    monkeypatch.setattr(storage, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(storage, "DATA_FILE", tmp_path / "problems.json")
+    monkeypatch.setattr(storage, "STREAK_FILE", tmp_path / "streak.json")
+
+    runner = CliRunner()
+    problem = make_problem()
+    storage.save_problems([problem])
+    update_streak()
+
+    result = runner.invoke(main, ["today"])
+
+    assert result.exit_code == 0
+    assert "Streak" in result.output
+
+
+def test_today_command_empty(tmp_path, monkeypatch):
+    monkeypatch.setattr(storage, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(storage, "DATA_FILE", tmp_path / "problems.json")
+    monkeypatch.setattr(storage, "STREAK_FILE", tmp_path / "streak.json")
+
+    runner = CliRunner()
+
+    result = runner.invoke(main, ["today"])
+
+    assert "No Saved Problems" in result.output
