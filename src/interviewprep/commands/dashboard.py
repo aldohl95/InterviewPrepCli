@@ -59,10 +59,32 @@ def dashboard():
       str(count)
     )
   
- 
+  #for average difficulty
+  for problem in problems:
+    pattern = problem.pattern
+    difficulty = problem.personal_difficulty
+
+    if pattern not in personal_difficulty_frequency:
+      personal_difficulty_frequency[pattern] = {
+        "total_difficulty":0,
+        "count": 0
+      }
+    
+    personal_difficulty_frequency[pattern]["total_difficulty"] += difficulty
+    personal_difficulty_frequency[pattern]["count"] += 1
+  
+  for i, (pattern, count) in enumerate(personal_difficulty_frequency.items(),start = 1):
+    average = count["total_difficulty"] / count["count"]
+    average_difficulty_table.add_row(
+      str(i),
+      pattern,
+      str(average)
+    )
+
   
   console.print(leetcode_difficulty_table)
   console.print(freq_table)
+  console.print(average_difficulty_table)
   
 
 
