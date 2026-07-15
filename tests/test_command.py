@@ -274,3 +274,28 @@ def test_review_command_invalid_number(tmp_path, monkeypatch):
     result = runner.invoke(main, ["review", "99"])
 
     assert result.exit_code == 1
+
+
+def test_dashboard_command_shows_problem(tmp_path, monkeypatch):
+    monkeypatch.setattr(storage, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(storage, "DATA_FILE", tmp_path / "problems.json")
+
+    problem = make_problem()
+    runner = CliRunner()
+    storage.save_problems([problem])
+
+    result = runner.invoke(main, ["dashboard"])
+
+    assert result.exit_code == 0
+    assert "Easy" in result.output
+
+
+def test_dashboard_command_empty(tmp_path, monkeypatch):
+    monkeypatch.setattr(storage, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(storage, "DATA_FILE", tmp_path / "problems.json")
+
+    runner = CliRunner()
+
+    runner = runner.invoke(main, ["dashboard"])
+
+    assert "No Saved Problems yet"
