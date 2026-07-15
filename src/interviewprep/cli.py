@@ -6,6 +6,7 @@ from interviewprep.commands.edit import edit
 from interviewprep.commands.delete import delete
 from interviewprep.commands.review import review
 from interviewprep.commands.dashboard import dashboard
+from interviewprep.commands.today import today
 
 
 @click.group()
@@ -21,3 +22,4 @@ main.add_command(edit)
 main.add_command(delete)
 main.add_command(review)
 main.add_command(dashboard)
+main.add_command(today)

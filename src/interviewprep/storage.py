@@ -65,3 +65,15 @@ def find_attempts_by_needs_resolve(
     problems: list[Problem], needs_resolve: bool
 ) -> list[Problem]:
     return [p for p in problems if p.needs_resolve == needs_resolve]
+
+def find_overdue_attempts_by_date(
+    problems: list[Problem], review_date: date
+) -> list[Problem]: return [p for p in problems if p.next_review_date is not None and p.next_review_date < review_date]
+
+def find_due_today_attempts_by_date(
+    problems: list[Problem], review_date: date
+) -> list[Problem]: return [p for p in problems if p.next_review_date is not None and p.next_review_date == review_date]
+
+def find_attempts_due_later_by_date(
+    problems: list[Problem], review_date: date
+) -> list[Problem]: return[p for p in problems if p.next_review_date is not None and p.next_review_date > review_date]
