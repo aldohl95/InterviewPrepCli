@@ -6,6 +6,7 @@ from interviewprep.models import Problem, LeetcodeDifficulty
 
 DATA_DIR = Path(user_data_dir("interviewprep"))
 DATA_FILE = DATA_DIR / "problems.json"
+STREAK_FILE = DATA_DIR / "streak.json"
 
 
 def _problem_to_dict(problem: Problem) -> dict:
@@ -44,6 +45,23 @@ def _dict_to_problem(data: dict) -> Problem:
     )
 
 
+def save_streak(streak: dict) -> None:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    with open(STREAK_FILE, "w") as f:
+        json.dump(streak, f, indent=2)
+
+
+def load_streak() -> dict:
+    if not STREAK_FILE.exists():
+        return {
+            "current_streak": 0,
+            "longest_streak": 0,
+            "last_completed": None,
+        }
+    with open(STREAK_FILE) as f:
+        return json.load(f)
+
+
 def save_problems(problems: list[Problem]) -> None:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     with open(DATA_FILE, "w") as f:
@@ -66,14 +84,32 @@ def find_attempts_by_needs_resolve(
 ) -> list[Problem]:
     return [p for p in problems if p.needs_resolve == needs_resolve]
 
+
 def find_overdue_attempts_by_date(
     problems: list[Problem], review_date: date
-) -> list[Problem]: return [p for p in problems if p.next_review_date is not None and p.next_review_date < review_date]
+) -> list[Problem]:
+    return [
+        p
+        for p in problems
+        if p.next_review_date is not None and p.next_review_date < review_date
+    ]
+
 
 def find_due_today_attempts_by_date(
     problems: list[Problem], review_date: date
-) -> list[Problem]: return [p for p in problems if p.next_review_date is not None and p.next_review_date == review_date]
+) -> list[Problem]:
+    return [
+        p
+        for p in problems
+        if p.next_review_date is not None and p.next_review_date == review_date
+    ]
+
 
 def find_attempts_due_later_by_date(
     problems: list[Problem], review_date: date
-) -> list[Problem]: return[p for p in problems if p.next_review_date is not None and p.next_review_date > review_date]
+) -> list[Problem]:
+    return [
+        p
+        for p in problems
+        if p.next_review_date is not None and p.next_review_date > review_date
+    ]

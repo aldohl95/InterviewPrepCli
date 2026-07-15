@@ -3,6 +3,7 @@ from interviewprep.storage import load_problems, save_problems, find_attempts_by
 from datetime import date
 from interviewprep.prompts import prompt_for_problem
 from interviewprep.scheduler import calculate_next_review_date
+from interviewprep.streak import update_streak
 
 
 @click.command()
@@ -20,6 +21,8 @@ def review(number):
         new_problem.next_review_date = calculate_next_review_date(new_problem, prior)
         problems.append(new_problem)
         save_problems(problems)
+        update_streak()
+
     else:
         click.echo("That problem does not exist")
         raise SystemExit(1)
