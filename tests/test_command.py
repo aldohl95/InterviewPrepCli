@@ -328,3 +328,33 @@ def test_today_command_empty(tmp_path, monkeypatch):
     result = runner.invoke(main, ["today"])
 
     assert "No Saved Problems" in result.output
+
+
+def test_export_command_writes_problem(tmp_path, monkeypatch):
+    monkeypatch.setattr(storage, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(storage, "DATA_FILE", tmp_path / "problems.json")
+
+    runner = CliRunner()
+    problem = make_problem()
+    problem2 = make_problem(problem_name="Linked List")
+    storage.save_problems([problem, problem2])
+    output_path = tmp_path / "backup.json"
+
+    result = runner.invoke(main, ["export", "--output", str(output_path)])
+
+    exported = storage.read_problems_from_file(output_path)
+    assert len(exported) == 2
+    assert exported[0].problem_name == "Two Sum"
+    assert exported[1].problem_name == "Linked List"
+    assert result.exit_code == 0
+
+
+def test_export_command_empty(tmp_path, monkeypatch):
+    monkeypatch.setattr(storage, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(storage, "DATA_FILE", tmp_path / "problems.json")
+
+    output_path = tmp_path / "backup.json"
+    runner = CliRunner()
+    result = runner.invoke(main, ["export", "--output", str(output_path)])
+
+    assert "No problems to export" in result.output
