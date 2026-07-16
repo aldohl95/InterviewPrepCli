@@ -8,9 +8,28 @@ version = "0.1.0"
 description = "A CLI tool for organizing technical interview preparation"
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "MIT" }
+license = "MIT"
+authors = [
+    {name = "Tevita Mathias", email = "mathias.tevita@icloud.com" }
+]
+keywords = ["cli", "leetcode", "interview-prep", "spaced-repetition"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Education",
+]
+
 
 dependencies = ["platformdirs", "click", "rich"]
+[project.urls]
+Homepage = "https://github.com/aldohl95/InterviewPrepCli"
+Repository = "https://github.com/aldohl95/InterviewPrepCli"
+Issues = "https://github.com/aldohl95/InterviewPrepCli/issues"
 
 [project.optional-dependencies]
 dev = [

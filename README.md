@@ -14,11 +14,25 @@ A command-line application for organizing and optimizing technical interview pre
 
 Requires Python 3.11 or higher.
 
+### Quick install (recommended)
+
+\`\`\`bash
+pip install interviewprep-cli
+\`\`\`
+
+Or install with [pipx](https://pipx.pypa.io/) for isolated installation:
+
+```bash
+pipx install interviewprep-cli
+```
+
+### Install from source (for development)
+
 ```bash
 git clone https://github.com/aldohl95/InterviewPrepCli.git
 cd InterviewPrepCli
 python3 -m venv .venv
-source .venv/bin/activate    # On Windows: .venv\Scripts\activate
+source .venv/bin/activate
 pip install -e ".[dev]" --no-build-isolation
 ```
 
