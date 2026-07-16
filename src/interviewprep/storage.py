@@ -62,17 +62,39 @@ def load_streak() -> dict:
         return json.load(f)
 
 
-def save_problems(problems: list[Problem]) -> None:
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    with open(DATA_FILE, "w") as f:
+def write_problems_to_file(problems: list[Problem], path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w") as f:
         json.dump([_problem_to_dict(p) for p in problems], f, indent=2)
+
+
+def read_problems_from_file(path: Path) -> list[Problem]:
+    if not path.exists():
+        raise FileNotFoundError(f"file not found: {path}")
+    with open(path) as f:
+        try:
+            data = json.load(f)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Not valid Json: {e}")
+    if not isinstance(data, list):
+        raise ValueError("Expected a json list of problems")
+    problems = []
+    for i, entry in enumerate(data, start=1):
+        try:
+            problems.append(_dict_to_problem(entry))
+        except (KeyError, ValueError, TypeError) as e:
+            raise ValueError(f"Invalid data in row {i}: {e}")
+    return problems
+
+
+def save_problems(problems: list[Problem]) -> None:
+    write_problems_to_file(problems, DATA_FILE)
 
 
 def load_problems() -> list[Problem]:
     if not DATA_FILE.exists():
         return []
-    with open(DATA_FILE) as f:
-        return [_dict_to_problem(d) for d in json.load(f)]
+    return read_problems_from_file(DATA_FILE)
 
 
 def find_attempts_by_name(problems: list[Problem], name: str) -> list[Problem]:
