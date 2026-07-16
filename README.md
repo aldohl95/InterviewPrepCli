@@ -116,7 +116,7 @@ Merge mode adds imported problems to existing data. Replace mode overwrites ever
 ### Directory structure
 ### Full project structure
 
-\`\`\`
+```
 interviewprep-cli/
 ├── src/
 │   └── interviewprep/
@@ -153,7 +153,7 @@ interviewprep-cli/
 ├── SPEC.md
 ├── LICENSE
 └── pyproject.toml           — project config, dependencies, tool settings
-\`\`\`
+```
 
 ### Data storage
 
