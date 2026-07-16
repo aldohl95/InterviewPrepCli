@@ -8,6 +8,7 @@ from interviewprep.commands.review import review
 from interviewprep.commands.dashboard import dashboard
 from interviewprep.commands.today import today
 from interviewprep.commands.export import export
+from interviewprep.commands.import_problems import import_problems
 
 
 @click.group()
@@ -25,3 +26,4 @@ main.add_command(review)
 main.add_command(dashboard)
 main.add_command(today)
 main.add_command(export)
+main.add_command(import_problems)

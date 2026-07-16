@@ -358,3 +358,83 @@ def test_export_command_empty(tmp_path, monkeypatch):
     result = runner.invoke(main, ["export", "--output", str(output_path)])
 
     assert "No problems to export" in result.output
+
+
+def test_import_command_replace_mode(tmp_path, monkeypatch):
+    monkeypatch.setattr(storage, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(storage, "DATA_FILE", tmp_path / "problems.json")
+
+    original = make_problem(problem_name="Original")
+    storage.save_problems([original])
+
+    import_path = tmp_path / "import.json"
+    imported_a = make_problem(problem_name="Imported A")
+    imported_b = make_problem(problem_name="Imported B")
+    storage.write_problems_to_file([imported_a, imported_b], import_path)
+
+    runner = CliRunner()
+    result = runner.invoke(
+        main, ["import", "--input", str(import_path), "--mode", "replace"]
+    )
+
+    assert result.exit_code == 0
+    problems = storage.load_problems()
+    assert len(problems) == 2
+    assert problems[0].problem_name == "Imported A"
+    assert problems[1].problem_name == "Imported B"
+
+
+def test_import_command_merge_mode(tmp_path, monkeypatch):
+    monkeypatch.setattr(storage, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(storage, "DATA_FILE", tmp_path / "problems.json")
+
+    original = make_problem(problem_name="Original")
+    storage.save_problems([original])
+
+    import_path = tmp_path / "import.json"
+    imported_a = make_problem(problem_name="Imported A")
+    imported_b = make_problem(problem_name="Imported B")
+    storage.write_problems_to_file([imported_a, imported_b], import_path)
+
+    runner = CliRunner()
+    result = runner.invoke(
+        main, ["import", "--input", str(import_path), "--mode", "merge"]
+    )
+
+    assert result.exit_code == 0
+    problems = storage.load_problems()
+    assert len(problems) == 3
+    assert problems[0].problem_name == "Original"
+    assert problems[1].problem_name == "Imported A"
+    assert problems[2].problem_name == "Imported B"
+
+
+def test_import_command_missing_file(tmp_path, monkeypatch):
+    monkeypatch.setattr(storage, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(storage, "DATA_FILE", tmp_path / "problems.json")
+
+    missing_path = tmp_path / "does_not_exist.json"
+
+    runner = CliRunner()
+    result = runner.invoke(
+        main, ["import", "--input", str(missing_path), "--mode", "replace"]
+    )
+
+    assert result.exit_code == 1
+    assert "not found" in result.output
+
+
+def test_import_command_invalid_json(tmp_path, monkeypatch):
+    monkeypatch.setattr(storage, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(storage, "DATA_FILE", tmp_path / "problems.json")
+
+    bad_path = tmp_path / "bad.json"
+    bad_path.write_text("not json at all")
+
+    runner = CliRunner()
+    result = runner.invoke(
+        main, ["import", "--input", str(bad_path), "--mode", "replace"]
+    )
+
+    assert result.exit_code == 1
+    assert "Error reading file" in result.output
