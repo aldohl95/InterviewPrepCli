@@ -50,7 +50,7 @@ def today():
             str(i),
             problem.problem_name,
             problem.pattern,
-            days_overdue,
+            str(days_overdue),
         )
 
     # due today Table
@@ -76,10 +76,10 @@ def today():
         )
 
     # streak table
-    streak_table.add_row(
+    last = streak_table.add_row(
         str(streak["current_streak"]),
         str(streak["longest_streak"]),
-        (streak["last_completed"]),
+        str(last) if last else "-",
     )
 
     if due_today:
