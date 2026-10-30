@@ -76,7 +76,9 @@ def today():
         )
 
     # streak table
-    last = streak_table.add_row(
+    last = streak.get("last_completed")
+
+    streak_table.add_row(
         str(streak["current_streak"]),
         str(streak["longest_streak"]),
         str(last) if last else "-",
